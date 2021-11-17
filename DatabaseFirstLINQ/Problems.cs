@@ -30,8 +30,8 @@ namespace DatabaseFirstLINQ
             //ProblemThirteen();
             //ProblemFourteen();
             //ProblemFifteen();
-            ProblemSixteen();
-            //ProblemSeventeen();
+            //ProblemSixteen();
+            ProblemSeventeen();
             //ProblemEighteen();
             //ProblemNineteen();
             //ProblemTwenty();
@@ -264,8 +264,8 @@ namespace DatabaseFirstLINQ
             _context.UserRoles.Remove(userRole);
             UserRole newUserRole = new UserRole()
             {
-                UserId = _context.Users.Where(u => u.Email == "mike@gmail.com").Select(u => u.Id).SingleOrDefault(),
-                RoleId = _context.Roles.Where(r => r.RoleName == "Employee").Select(r => r.Id).SingleOrDefault()
+                UserId = _context.Users.Where(u => u.Email == "mike@gmail.com").Select(u => u.Id).FirstOrDefault(),
+                RoleId = _context.Roles.Where(r => r.RoleName == "Employee").Select(r => r.Id).FirstOrDefault()
             };
             _context.UserRoles.Add(newUserRole);
             _context.SaveChanges();
