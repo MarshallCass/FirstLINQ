@@ -33,8 +33,8 @@ namespace DatabaseFirstLINQ
             //ProblemSixteen();
             //ProblemSeventeen();
             //ProblemEighteen();
-            ProblemNineteen();
-            //ProblemTwenty();
+            //ProblemNineteen();
+            ProblemTwenty();
         }
 
         // <><><><><><><><> R Actions (Read) <><><><><><><><><>
