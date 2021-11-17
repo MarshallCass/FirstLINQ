@@ -15,21 +15,21 @@ namespace DatabaseFirstLINQ
         }
         public void RunLINQQueries()
         {
-            ProblemOne();
-            ProblemTwo();
-            ProblemThree();
-            ProblemFour();
-            ProblemFive();
-            ProblemSix();
-            ProblemSeven();
-            ProblemEight();
-            ProblemNine();
-            ProblemTen();
-            ProblemEleven();
-            ProblemTwelve();
-            ProblemThirteen();
+            //ProblemOne();
+            //ProblemTwo();
+            //ProblemThree();
+            //ProblemFour();
+            //ProblemFive();
+            //ProblemSix();
+            //ProblemSeven();
+            //ProblemEight();
+            //ProblemNine();
+            //ProblemTen();
+            //ProblemEleven();
+            //ProblemTwelve();
+            //ProblemThirteen();
             //ProblemFourteen();
-            //ProblemFifteen();
+            ProblemFifteen();
             //ProblemSixteen();
             //ProblemSeventeen();
             //ProblemEighteen();
@@ -221,8 +221,8 @@ namespace DatabaseFirstLINQ
         private void ProblemFourteen()
         {
             // Add the product you create to the user we created in the ShoppingCart junction table using LINQ.
-            var userId = _context.Users.Where(u => u.Email == "david@gmail.com").Select(u => u.Id).SingleOrDefault();
-            var productId = _context.Products.Where(p => p.Name == "Good Guy Doll").Select(p => p.Id).SingleOrDefault();
+            var userId = _context.Users.Where(u => u.Email == "david@gmail.com").Select(u => u.Id).FirstOrDefault();
+            var productId = _context.Products.Where(p => p.Name == "Good Guy Doll").Select(p => p.Id).FirstOrDefault();
             ShoppingCart newShoppingCart = new ShoppingCart()
             {
                 UserId = userId,
@@ -238,7 +238,7 @@ namespace DatabaseFirstLINQ
         private void ProblemFifteen()
         {
             // Update the email of the user we created to "mike@gmail.com"
-            var user = _context.Users.Where(u => u.Email == "david@gmail.com").SingleOrDefault();
+            var user = _context.Users.Where(u => u.Email == "david@gmail.com").FirstOrDefault();
             user.Email = "mike@gmail.com";
             _context.Users.Update(user);
             _context.SaveChanges();
@@ -247,7 +247,7 @@ namespace DatabaseFirstLINQ
         private void ProblemSixteen()
         {
             // Update the price of the product you created to something different using LINQ.
-            var product = _context.Products.Where(u => u.Name == "Good Guy Doll").SingleOrDefault();
+            var product = _context.Products.Where(u => u.Name == "Good Guy Doll").FirstOrDefault();
             product.Price = 200;
             _context.Products.Update(product);
             _context.SaveChanges();
@@ -258,7 +258,7 @@ namespace DatabaseFirstLINQ
             // Change the role of the user we created to "Employee"
             // HINT: You need to delete the existing role relationship and then create a new UserRole object and add it to the UserRoles table
             // See problem eighteen as an example of removing a role relationship
-            var userRole = _context.UserRoles.Where(ur => ur.User.Email == "mike@gmail.com").SingleOrDefault();
+            var userRole = _context.UserRoles.Where(ur => ur.User.Email == "mike@gmail.com").FirstOrDefault();
             _context.UserRoles.Remove(userRole);
             UserRole newUserRole = new UserRole()
             {
