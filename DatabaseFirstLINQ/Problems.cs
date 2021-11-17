@@ -242,6 +242,7 @@ namespace DatabaseFirstLINQ
             user.Email = "mike@gmail.com";
             _context.Users.Update(user);
             _context.SaveChanges();
+
         }
 
         private void ProblemSixteen()
