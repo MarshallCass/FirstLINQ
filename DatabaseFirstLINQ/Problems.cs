@@ -35,6 +35,9 @@ namespace DatabaseFirstLINQ
             //ProblemEighteen();
             //ProblemNineteen();
             //ProblemTwenty();
+            //BonusOne();
+            //BonusTwo();
+            BonusThree();
         }
 
         // <><><><><><><><> R Actions (Read) <><><><><><><><><>
@@ -45,7 +48,7 @@ namespace DatabaseFirstLINQ
             var users = _context.Users;
             Console.WriteLine(users.ToList().Count);
 
-            
+
 
         }
 
@@ -57,7 +60,7 @@ namespace DatabaseFirstLINQ
             foreach (User user in users)
             {
                 Console.WriteLine(user.Email);
-              
+
             }
 
         }
@@ -298,7 +301,7 @@ namespace DatabaseFirstLINQ
         {
             // Delete the user with the email "oda@gmail.com" from the Users table using LINQ.
             var users = _context.Users.Where(u => u.Email == "oda@gmail.com");
-            foreach(User person in users)
+            foreach (User person in users)
             {
                 _context.Users.Remove(person);
             }
@@ -319,7 +322,7 @@ namespace DatabaseFirstLINQ
             string password = Console.ReadLine();
 
             var user = _context.Users.Where(u => u.Email == email && u.Password == password).SingleOrDefault();
-            if(user == null)
+            if (user == null)
             {
                 Console.WriteLine("Not a real email guy! Try Again!");
             }
@@ -332,10 +335,10 @@ namespace DatabaseFirstLINQ
         private void BonusTwo()
         {
             // Write a query that finds the total of every users shopping cart products using LINQ.
-            // Display the total of each users shopping cart as well as the total of the toals to the console.
+            // Display the total of each users shopping cart as well as the total of the totals to the console.
             var users = _context.Users.ToList();
             decimal Total = 0;
-            foreach(var user in users)
+            foreach (var user in users)
             {
                 var userTotal = _context.ShoppingCarts.Include(sc => sc.User).Include(sc => sc.Product).Where(sc => sc.User.Id == user.Id).Select(sc => sc.Product.Price * sc.Quantity).Sum();
                 Console.WriteLine($"Email: {user.Email} Total: ${userTotal}");
@@ -357,62 +360,100 @@ namespace DatabaseFirstLINQ
             // 3. If the user does not succesfully sing in
             // a. Display "Invalid Email or Password"
             // b. Re-prompt the user for credentials
+            bool LoggedIn = false;
+            User user;
 
-            Console.WriteLine("Enter your Email: ");
-            string email = Console.ReadLine();
-            Console.WriteLine("Enter password: ");
-            string password = Console.ReadLine();
-            
-
-            var user = _context.Users.Include(u => .u.Email).Where(u => u.Email == email && u.Password == password).SingleOrDefault();
-            if (user == null)
+            while (!LoggedIn)
             {
-                Console.WriteLine("Invalid Email or Password! Try Again!");
-                BonusThree();
+                Console.WriteLine("Enter your Email: ");
+                string email = Console.ReadLine();
+                Console.WriteLine("Enter password: ");
+                string password = Console.ReadLine();
+
+
+                user = _context.Users.Where(u => u.Email == email && u.Password == password).FirstOrDefault();
+                if (user == null)
+                {
+                    Console.WriteLine("Invalid Email or Password! Try Again!");
+                    BonusThree();
+                }
+                else
+                {
+                    LoggedIn = true;
+                    Console.WriteLine("Logged in!");
+                    menu();
+
+
+                }
             }
-            else
+        }
+        private void seeItemsInCart(User user)
             {
-                Console.WriteLine( "{u.Email}, Logged in!");
 
+            var userProducts = _context.ShoppingCarts.Include(up => up.Product).Include(up => up.User).Where(up => up.User.Email == user.Email);
+
+                foreach (ShoppingCart product in userProducts)
+                {
+                    Console.WriteLine($"Name: {product.Product.Name}, ${product.Product.Price}, Quantity: {product.Quantity}");           
+                }
+                    Console.WriteLine("Press Any Key To Return To Menu.")
+                    return;
+
+            }
+        private void viewAllProduct()
+        {
+
+            var products = _context.Products.Where(p => p.Price > 150).ToList();
+
+            foreach (Product product in products)
+            {
+                Console.WriteLine($"{product.Name } \n {product.Price}");
+            }
+
+
+        }
+            //private void addProductsToCart(User user)
+            //{
+
+
+
+            //}
+            //private void removeItemFromCart(User user)
+            //{
+
+
+
+
+            //}
+        private void menu()
+            {
                 int option;
                 Console.WriteLine();
                 Console.WriteLine("View products in your cart <1>");
                 Console.WriteLine("View all Products available <2>");
                 Console.WriteLine("Add product to your cart <3>");
                 Console.WriteLine("Remove product from cart <4>");
-                Console.WriteLine();
+                Console.WriteLine("Log Out <5>");
+                Console.WriteLine("");
                 Console.Write("Your input:");
                 option = Convert.ToInt32(Console.ReadLine());
+
                 switch (option)
                 {
                     case 1:
-                        Console.WriteLine("Viewing all Products in your cart");
-                        var userProducts = _context.ShoppingCarts.Include(up => up.Product).Include(up => up.User).Where(up => up.User.Email == {u.Email});
-                        foreach (ShoppingCart product in userProducts)
-                        {
-                            Console.WriteLine($"Name: {product.Product.Name}, ${product.Product.Price}, Quantity: {product.Quantity}");
-                        }
+                        seeItemsInCart(user);
                         break;
                     case 2:
-                        Console.WriteLine("Viewing all Products available");
-                        var productsList = _context.Products.Include(p = p.Product);
-                        foreach (Product product in productsList)
-                        {
-                            Console.WriteLine({product.Product.Name});
-                        }
+                        viewAllProduct();
                         break;
                     case 3:
-                        Console.WriteLine("Add product to your cart");
-                        //Neet to List/Select items and increment
-                  
-                break;
+                        //addProductsToCart(user);
+                        break;
                     case 4:
-                        Console.WriteLine("Remove product from cart ");
-                //Need to List/select item
-                        var cartItem = _context.ShoppingCarts.Where(ur => ur.User.Email == { u.Email});
-                        _context.ShoppingCarts.Remove(cartItem);
-                        _context.SaveChanges();
-
+                        //removeItemFromCart(user);
+                        break;
+                    case 5:
+                        LoggedIn = false;
                         break;
                     default:
                         Console.WriteLine("Wrong entry \n");
@@ -426,8 +467,6 @@ namespace DatabaseFirstLINQ
             }
         }
 
-
-    }
 
     }
 }
