@@ -313,12 +313,35 @@ namespace DatabaseFirstLINQ
             // Prompt the user to enter in an email and password through the console.
             // Take the email and password and check if the there is a person that matches that combination.
             // Print "Signed In!" to the console if they exists and the values match otherwise print "Invalid Email or Password.".
+            Console.WriteLine("Enter your Email: ");
+            string email = Console.ReadLine();
+            Console.WriteLine("Enter password: ");
+            string password = Console.ReadLine();
+
+            var user = _context.Users.Where(u => u.Email == email && u.Password == password).SingleOrDefault();
+            if(user == null)
+            {
+                Console.WriteLine("Not a real email guy! Try Again!");
+            }
+            else
+            {
+                Console.WriteLine("Logged in!");
+            }
         }
 
         private void BonusTwo()
         {
             // Write a query that finds the total of every users shopping cart products using LINQ.
             // Display the total of each users shopping cart as well as the total of the toals to the console.
+            var users = _context.Users.ToList();
+            decimal Total = 0;
+            foreach(var user in users)
+            {
+                var userTotal = _context.ShoppingCarts.Include(sc => sc.User).Include(sc => sc.Product).Where(sc => sc.User.Id == user.Id).Select(sc => sc.Product.Price * sc.Quantity).Sum();
+                Console.WriteLine($"Email: {user.Email} Total: ${userTotal}");
+                Total += userTotal.Value;
+            }
+            Console.WriteLine($"Total: ${Total}");
         }
 
         // BIG ONE
