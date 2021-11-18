@@ -358,7 +358,76 @@ namespace DatabaseFirstLINQ
             // a. Display "Invalid Email or Password"
             // b. Re-prompt the user for credentials
 
+            Console.WriteLine("Enter your Email: ");
+            string email = Console.ReadLine();
+            Console.WriteLine("Enter password: ");
+            string password = Console.ReadLine();
+            
+
+            var user = _context.Users.Include(u => .u.Email).Where(u => u.Email == email && u.Password == password).SingleOrDefault();
+            if (user == null)
+            {
+                Console.WriteLine("Invalid Email or Password! Try Again!");
+                BonusThree();
+            }
+            else
+            {
+                Console.WriteLine( "{u.Email}, Logged in!");
+
+                int option;
+                Console.WriteLine();
+                Console.WriteLine("View products in your cart <1>");
+                Console.WriteLine("View all Products available <2>");
+                Console.WriteLine("Add product to your cart <3>");
+                Console.WriteLine("Remove product from cart <4>");
+                Console.WriteLine();
+                Console.Write("Your input:");
+                option = Convert.ToInt32(Console.ReadLine());
+                switch (option)
+                {
+                    case 1:
+                        Console.WriteLine("Viewing all Products in your cart");
+                        var userProducts = _context.ShoppingCarts.Include(up => up.Product).Include(up => up.User).Where(up => up.User.Email == {u.Email});
+                        foreach (ShoppingCart product in userProducts)
+                        {
+                            Console.WriteLine($"Name: {product.Product.Name}, ${product.Product.Price}, Quantity: {product.Quantity}");
+                        }
+                        break;
+                    case 2:
+                        Console.WriteLine("Viewing all Products available");
+                        var productsList = _context.Products.Include(p = p.Product);
+                        foreach (Product product in productsList)
+                        {
+                            Console.WriteLine({product.Product.Name});
+                        }
+                        break;
+                    case 3:
+                        Console.WriteLine("Add product to your cart");
+                        //Neet to List/Select items and increment
+                  
+                break;
+                    case 4:
+                        Console.WriteLine("Remove product from cart ");
+                //Need to List/select item
+                        var cartItem = _context.ShoppingCarts.Where(ur => ur.User.Email == { u.Email});
+                        _context.ShoppingCarts.Remove(cartItem);
+                        _context.SaveChanges();
+
+                        break;
+                    default:
+                        Console.WriteLine("Wrong entry \n");
+                        break;
+                }
+                Console.WriteLine();
+                Console.ReadKey();
+
+
+
+            }
         }
+
+
+    }
 
     }
 }
