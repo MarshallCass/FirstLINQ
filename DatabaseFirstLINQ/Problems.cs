@@ -381,7 +381,37 @@ namespace DatabaseFirstLINQ
                 {
                     LoggedIn = true;
                     Console.WriteLine("Logged in!");
-                    menu();
+                    
+                    int option;
+                    Console.WriteLine();
+                    Console.WriteLine("View products in your cart <1>");
+                    Console.WriteLine("View all Products available <2>");
+                    Console.WriteLine("Add product to your cart <3>");
+                    Console.WriteLine("Remove product from cart <4>");
+                    Console.WriteLine("");
+                    Console.Write("Your input:");
+                    option = Convert.ToInt32(Console.ReadLine());
+
+                    switch (option)
+                    {
+                        case 1:
+                            seeItemsInCart(user);
+                            break;
+                        case 2:
+                            viewAllProduct();
+                            break;
+                        case 3:
+                            //addProductsToCart(user);
+                            break;
+                        case 4:
+                            //removeItemFromCart(user);
+                            break;
+                        default:
+                            Console.WriteLine("Wrong entry \n");
+                            break;
+                    }
+                    Console.WriteLine();
+                    Console.ReadKey();
 
 
                 }
@@ -394,10 +424,11 @@ namespace DatabaseFirstLINQ
 
             foreach (ShoppingCart product in userProducts)
             {
-                    Console.WriteLine($"Name: {product.Product.Name}, ${product.Product.Price}, Quantity: {product.Quantity}");           
+                    Console.WriteLine($"Name: {product.Product.Name}, ${product.Product.Price}, Quantity: {product.Quantity}");
             }
+            Console.WriteLine("");
             Console.WriteLine("Press Any Key To Return To Menu.");
-
+            Console.ReadKey();
         }
         private void viewAllProduct()
         {
@@ -408,87 +439,45 @@ namespace DatabaseFirstLINQ
             {
                 Console.WriteLine($"{product.Name } \n {product.Price}");
             }
+            Console.WriteLine("");
             Console.WriteLine("Press Any Key To Return To Menu.");
 
 
         }
-        private void addProductsToCart(User user)
-        {
-            var productId = _context.Products.Where(p => p.Name == "Good Guy Doll").Select(p => p.Id).FirstOrDefault();
-            ShoppingCart newShoppingCart = new ShoppingCart()
-            {
-                ProductId = productId,
-                Quantity = 1,
-            };
-            _context.ShoppingCarts.Add(newShoppingCart);
-            _context.SaveChanges();
+        //private void addProductsToCart(User user)
+        //{
+        //    var productId = _context.Products.Where(p => p.Name == "Good Guy Doll").Select(p => p.Id).FirstOrDefault();
+        //    ShoppingCart newShoppingCart = new ShoppingCart()
+        //    {
+        //        ProductId = productId,
+        //        Quantity = 1,
+        //    };
+        //    _context.ShoppingCarts.Add(newShoppingCart);
+        //    _context.SaveChanges();
 
 
-        }
-        private void removeItemFromCart(User user)
-        {
-            var userProducts = _context.ShoppingCarts.Include(up => up.Product).Include(up => up.User).Where(up => up.User.Email == user.Email);
+        //}
+        //private void removeItemFromCart(User user)
+        //{
+        //    var userProducts = _context.ShoppingCarts.Include(up => up.Product).Include(up => up.User).Where(up => up.User.Email == user.Email);
 
-            foreach (ShoppingCart product in userProducts)
-            {
-                Console.WriteLine($"Name: {product.Product.Name}, ${product.Product.Price}, ID Number: {product.ProductId}");
-            }
-            int item;
-            Console.WriteLine("Input Product Number to be deleted.");
-            item = Convert.ToInt32(Console.ReadLine());
-            if (item == userProducts.ProductId);
-            {
-                _context.ShoppingCarts.Remove(item);
-                _context.SaveChanges();
-            }
-            else { 
-             }           
-
-
-        }
-
-        private void menu()
-            {
-                int option;
-                Console.WriteLine();
-                Console.WriteLine("View products in your cart <1>");
-                Console.WriteLine("View all Products available <2>");
-                Console.WriteLine("Add product to your cart <3>");
-                Console.WriteLine("Remove product from cart <4>");
-                Console.WriteLine("Log Out <5>");
-                Console.WriteLine("");
-                Console.Write("Your input:");
-                option = Convert.ToInt32(Console.ReadLine());
-
-                switch (option)
-                {
-                    case 1:
-                        seeItemsInCart(user);
-                        break;
-                    case 2:
-                        viewAllProduct();
-                        break;
-                    case 3:
-                        //addProductsToCart(user);
-                        break;
-                    case 4:
-                        //removeItemFromCart(user);
-                        break;
-                    case 5:
-                        LoggedIn = false;
-                        break;
-                    default:
-                        Console.WriteLine("Wrong entry \n");
-                        break;
-                }
-                Console.WriteLine();
-                Console.ReadKey();
+        //    foreach (ShoppingCart product in userProducts)
+        //    {
+        //        Console.WriteLine($"Name: {product.Product.Name}, ${product.Product.Price}, ID Number: {product.ProductId}");
+        //    }
+        //    int item;
+        //    Console.WriteLine("Input Product Number to be deleted.");
+        //    item = Convert.ToInt32(Console.ReadLine());
+        //    if (item == userProducts.ProductId);
+        //    {
+        //        _context.ShoppingCarts.Remove(item);
+        //        _context.SaveChanges();
+        //    }
+        //    else { 
+        //     }           
 
 
-
-            }
-        }
-
+        //}
 
     }
 }
