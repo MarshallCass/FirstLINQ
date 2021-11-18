@@ -392,14 +392,13 @@ namespace DatabaseFirstLINQ
 
             var userProducts = _context.ShoppingCarts.Include(up => up.Product).Include(up => up.User).Where(up => up.User.Email == user.Email);
 
-                foreach (ShoppingCart product in userProducts)
-                {
+            foreach (ShoppingCart product in userProducts)
+            {
                     Console.WriteLine($"Name: {product.Product.Name}, ${product.Product.Price}, Quantity: {product.Quantity}");           
-                }
-                    Console.WriteLine("Press Any Key To Return To Menu.")
-                    return;
-
             }
+            Console.WriteLine("Press Any Key To Return To Menu.");
+
+        }
         private void viewAllProduct()
         {
 
@@ -409,22 +408,45 @@ namespace DatabaseFirstLINQ
             {
                 Console.WriteLine($"{product.Name } \n {product.Price}");
             }
+            Console.WriteLine("Press Any Key To Return To Menu.");
 
 
         }
-            //private void addProductsToCart(User user)
-            //{
+        private void addProductsToCart(User user)
+        {
+            var productId = _context.Products.Where(p => p.Name == "Good Guy Doll").Select(p => p.Id).FirstOrDefault();
+            ShoppingCart newShoppingCart = new ShoppingCart()
+            {
+                ProductId = productId,
+                Quantity = 1,
+            };
+            _context.ShoppingCarts.Add(newShoppingCart);
+            _context.SaveChanges();
 
 
+        }
+        private void removeItemFromCart(User user)
+        {
+            var userProducts = _context.ShoppingCarts.Include(up => up.Product).Include(up => up.User).Where(up => up.User.Email == user.Email);
 
-            //}
-            //private void removeItemFromCart(User user)
-            //{
+            foreach (ShoppingCart product in userProducts)
+            {
+                Console.WriteLine($"Name: {product.Product.Name}, ${product.Product.Price}, ID Number: {product.ProductId}");
+            }
+            int item;
+            Console.WriteLine("Input Product Number to be deleted.");
+            item = Convert.ToInt32(Console.ReadLine());
+            if (item == userProducts.ProductId);
+            {
+                _context.ShoppingCarts.Remove(item);
+                _context.SaveChanges();
+            }
+            else { 
+             }           
 
 
+        }
 
-
-            //}
         private void menu()
             {
                 int option;
